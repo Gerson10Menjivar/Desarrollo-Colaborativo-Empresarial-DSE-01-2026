@@ -1,32 +1,45 @@
 let productos = [];
 let indiceEditar = null;
 
+function mostrarSeccion(seccion) {
+    document.getElementById("formularioSection").style.display =
+        seccion === "formulario" ? "block" : "none";
+
+    document.getElementById("listaSection").style.display =
+        seccion === "lista" ? "block" : "none";
+}
+
 function agregarProducto() {
 
-    let nombre = document.getElementById("nombre").value;
+    let nombre = document.getElementById("nombre").value.trim();
     let precio = document.getElementById("precio").value;
-    let descripcion = document.getElementById("descripcion").value;
-    let estado = document.getElementById("estado").value;
+    let stock = parseInt(document.getElementById("stock").value);
+    let descripcion = document.getElementById("descripcion").value.trim();
     let categoria = document.getElementById("categoria").value;
 
-    if (nombre === "" || precio === "" || descripcion === "") {
+    if (!nombre || !precio || isNaN(stock) || !descripcion || !categoria) {
         Swal.fire({
             icon: 'warning',
             title: 'Campos incompletos',
-            text: 'Por favor complete toda la información'
+            text: 'Complete toda la información'
         });
         return;
     }
 
-    if (indiceEditar === null) {
+    // Estado automático
+    let estado = stock === 0 ? "Inactivo" : "Activo";
 
-        productos.push({
-            nombre,
-            precio,
-            descripcion,
-            estado,
-            categoria
-        });
+    let producto = {
+        nombre,
+        precio,
+        stock,
+        descripcion,
+        categoria,
+        estado
+    };
+
+    if (indiceEditar === null) {
+        productos.push(producto);
 
         Swal.fire({
             icon: 'success',
@@ -34,15 +47,7 @@ function agregarProducto() {
         });
 
     } else {
-
-        productos[indiceEditar] = {
-            nombre,
-            precio,
-            descripcion,
-            estado,
-            categoria
-        };
-
+        productos[indiceEditar] = producto;
         indiceEditar = null;
 
         Swal.fire({
@@ -53,6 +58,7 @@ function agregarProducto() {
 
     limpiarFormulario();
     mostrarProductos();
+    mostrarSeccion("lista");
 }
 
 function mostrarProductos() {
@@ -61,20 +67,34 @@ function mostrarProductos() {
 
     productos.forEach((prod, index) => {
 
+        let badgeEstado = prod.estado === "Activo"
+            ? '<span class="badge bg-success">Activo</span>'
+            : '<span class="badge bg-secondary">Inactivo</span>';
+
+        let badgeStock;
+
+        if (prod.stock === 0) {
+            badgeStock = `<span class="badge bg-danger">0 (Sin stock)</span>`;
+        } else if (prod.stock <= 5) {
+            badgeStock = `<span class="badge bg-warning text-dark">${prod.stock} (Bajo)</span>`;
+        } else {
+            badgeStock = `<span class="badge bg-primary">${prod.stock}</span>`;
+        }
+
         tabla.innerHTML += `
             <tr>
                 <td>${prod.nombre}</td>
                 <td>$${prod.precio}</td>
+                <td>${badgeStock}</td>
                 <td>${prod.descripcion}</td>
                 <td>${prod.categoria}</td>
+                <td>${badgeEstado}</td>
                 <td>
-                    <span class="badge ${prod.estado === 'Activo' ? 'bg-success' : 'bg-secondary'}">
-                        ${prod.estado}
-                    </span>
-                </td>
-                <td>
-                    <button class="editar-btn" onclick="editarProducto(${index})">
+                    <button class="btn btn-success btn-sm me-2" onclick="editarProducto(${index})">
                         Editar
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${index})">
+                        Eliminar
                     </button>
                 </td>
             </tr>
@@ -86,19 +106,43 @@ function editarProducto(index) {
 
     document.getElementById("nombre").value = productos[index].nombre;
     document.getElementById("precio").value = productos[index].precio;
+    document.getElementById("stock").value = productos[index].stock;
     document.getElementById("descripcion").value = productos[index].descripcion;
-    document.getElementById("estado").value = productos[index].estado;
     document.getElementById("categoria").value = productos[index].categoria;
 
     indiceEditar = index;
+    mostrarSeccion("formulario");
+}
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+function eliminarProducto(index) {
+
+    Swal.fire({
+        title: '¿Eliminar producto?',
+        text: 'Esta acción no se puede deshacer',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+
+        if (result.isConfirmed) {
+            productos.splice(index, 1);
+            mostrarProductos();
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto eliminado'
+            });
+        }
+    });
 }
 
 function limpiarFormulario() {
     document.getElementById("nombre").value = "";
     document.getElementById("precio").value = "";
+    document.getElementById("stock").value = "";
     document.getElementById("descripcion").value = "";
-    document.getElementById("estado").value = "Activo";
     document.getElementById("categoria").value = "";
 }
