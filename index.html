@@ -16,177 +16,152 @@ body {
 
 .navbar {
     background: linear-gradient(90deg, #0d6efd, #0b5ed7);
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 .navbar-brand {
     font-weight: 600;
     color: white !important;
-    letter-spacing: 0.5px;
-}
-
-.header-title {
-    margin-top: 30px;
-}
-
-.header-title h1 {
-    font-weight: 700;
-}
-
-.header-title p {
-    color: #6c757d;
 }
 
 .card {
     border: none;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-    transition: all 0.3s ease;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-}
-
-.section-title {
-    font-weight: 600;
-    color: #333;
-}
-
-.table thead {
-    background-color: #f1f3f5;
-}
-
-.table tbody tr:hover {
-    background-color: #f8f9fa;
-}
-
-.btn-primary {
-    background: linear-gradient(90deg, #0d6efd, #0b5ed7);
-    border: none;
-}
-
-.btn-light {
-    border-radius: 20px;
-}
-
-.footer-note {
-    font-size: 0.85rem;
-    color: gray;
-}
-
-.fade-section {
-    animation: fadeIn 0.4s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(10px);}
-    to {opacity: 1; transform: translateY(0);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg">
-  <div class="container-fluid px-4">
-    <span class="navbar-brand">
-        <i class="bi bi-box-seam"></i> Sistema de Inventario
-    </span>
-    <div>
-        <button class="btn btn-light me-2" onclick="mostrarSeccion('formulario')">
-            <i class="bi bi-pencil-square"></i> Formulario
-        </button>
-        <button class="btn btn-light" onclick="mostrarSeccion('lista')">
-            <i class="bi bi-list-ul"></i> Inventario
-        </button>
-    </div>
-  </div>
-</nav>
+<div class="container-fluid px-4">
 
-<!-- TITULO -->
-<div class="text-center header-title">
-    <h1>Sistema de Gestión de Inventario</h1>
-    <p>Administración eficiente y control profesional de productos</p>
-</div>
+<span class="navbar-brand">
+<i class="bi bi-box-seam"></i> Sistema de Inventario
+</span>
 
-<div class="container mt-4 mb-5">
-
-    <!-- FORMULARIO -->
-    <div id="formularioSection" class="card p-4 mb-4 fade-section">
-        <h5 class="section-title mb-4">
-            <i class="bi bi-plus-circle"></i> Registro / Actualización de Producto
-        </h5>
-
-        <div class="row">
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Nombre del producto</label>
-                <input type="text" id="nombre" class="form-control">
-            </div>
-
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Precio ($)</label>
-                <input type="number" id="precio" class="form-control">
-            </div>
-
-            <div class="col-md-3 mb-3">
-                <label class="form-label">Stock disponible</label>
-                <input type="number" id="stock" class="form-control">
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Descripción</label>
-            <input type="text" id="descripcion" class="form-control">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label">Categoría</label>
-            <select id="categoria" class="form-select">
-                <option value="">Seleccione categoría</option>
-                <option value="Tecnología">Tecnología</option>
-                <option value="Hogar">Hogar</option>
-                <option value="Ropa">Ropa</option>
-                <option value="Alimentos">Alimentos</option>
-            </select>
-        </div>
-
-        <button class="btn btn-primary w-100 py-2" onclick="agregarProducto()">
-    <i class="bi bi-save"></i> Guardar Producto
+<div>
+<button class="btn btn-light me-2" onclick="mostrarSeccion('formulario')">
+<i class="bi bi-pencil-square"></i> Formulario
 </button>
 
-        <div class="mt-2 footer-note">
-            * El estado se define automáticamente según el stock.
-        </div>
-    </div>
+<button class="btn btn-light" onclick="mostrarSeccion('lista')">
+<i class="bi bi-list-ul"></i> Inventario
+</button>
+</div>
 
-    <!-- LISTADO -->
-    <div id="listaSection" class="card p-4 fade-section" style="display:none;">
-        <h5 class="section-title mb-3">
-            <i class="bi bi-boxes"></i> Inventario de Productos
-        </h5>
+</div>
+</nav>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover align-middle">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Descripción</th>
-                        <th>Categoría</th>
-                        <th>Estado</th>
-                        <th style="width:150px;">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tablaProductos"></tbody>
-            </table>
-        </div>
-    </div>
+<div class="container mt-4">
+
+<!-- FORMULARIO -->
+<div id="formularioSection" class="card p-4 mb-4">
+
+<h5>Registro / Actualización de Producto</h5>
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label>Nombre</label>
+<input type="text" id="nombre" class="form-control">
+</div>
+
+<div class="col-md-3 mb-3">
+<label>Precio</label>
+<input type="number" id="precio" class="form-control">
+</div>
+
+<div class="col-md-3 mb-3">
+<label>Stock</label>
+<input type="number" id="stock" class="form-control">
+</div>
+
+</div>
+
+<div class="mb-3">
+<label>Descripción</label>
+<input type="text" id="descripcion" class="form-control">
+</div>
+
+<div class="mb-3">
+<label>Categoría</label>
+<select id="categoria" class="form-select">
+<option value="">Seleccione categoría</option>
+<option value="Tecnología">Tecnología</option>
+<option value="Hogar">Hogar</option>
+<option value="Ropa">Ropa</option>
+<option value="Alimentos">Alimentos</option>
+</select>
+</div>
+
+<button class="btn btn-primary w-100" onclick="agregarProducto()">
+Guardar Producto
+</button>
+
+</div>
+
+<!-- LISTA -->
+<div id="listaSection" class="card p-4" style="display:none;">
+
+<h5>Inventario de Productos</h5>
+
+<!-- BUSQUEDA Y FILTRO -->
+<div class="row mb-3">
+
+<div class="col-md-6">
+<input 
+type="text"
+id="busqueda"
+class="form-control"
+placeholder="🔎 Buscar producto por nombre..."
+onkeyup="filtrarProductos()">
+</div>
+
+<div class="col-md-6">
+<select 
+id="filtroCategoria"
+class="form-select"
+onchange="filtrarProductos()">
+
+<option value="">Todas las categorías</option>
+<option value="Tecnología">Tecnología</option>
+<option value="Hogar">Hogar</option>
+<option value="Ropa">Ropa</option>
+<option value="Alimentos">Alimentos</option>
+
+</select>
+</div>
+
+</div>
+
+<div class="table-responsive">
+
+<table class="table table-bordered table-hover">
+
+<thead>
+<tr>
+<th>Producto</th>
+<th>Precio</th>
+<th>Stock</th>
+<th>Descripción</th>
+<th>Categoría</th>
+<th>Estado</th>
+<th>Acciones</th>
+</tr>
+</thead>
+
+<tbody id="tablaProductos"></tbody>
+
+</table>
+
+</div>
+
+</div>
 
 </div>
 
 <script src="app.js"></script>
+
 </body>
 </html>
